@@ -24,7 +24,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // Init location manager
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.delegate = self
-        locationManager.requestAlwaysAuthorization()
+        if CLLocationManager.authorizationStatus() == .NotDetermined {
+            locationManager.requestAlwaysAuthorization()
+        }
+        
+        // Ask User to start GPS.
+        println(CLLocationManager.locationServicesEnabled())
+//        if CLLocationManager.locationServicesEnabled() == false {
+//            let alertController = UIAlertController(
+//                title: "位置服务被关闭",
+//                message: "您需要打开手机上的位置服务来使用本程序",
+//                preferredStyle: .Alert)
+//            
+//            let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+//            alertController.addAction(cancelAction)
+//            
+//            let openAction = UIAlertAction(title: "现在就去打开", style: .Default) { (action) in
+//                if let url = NSURL(string:UIApplicationOpenSettingsURLString) {
+//                    UIApplication.sharedApplication().openURL(url)
+//                }
+//            }
+//            alertController.addAction(openAction)
+//            
+//            self.presentViewController(alertController, animated: true, completion: nil)
+//        }
         
     }
 
@@ -41,6 +64,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    // major location update
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
 
         labelGPS.text = locations.last?.description
@@ -48,6 +72,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         // current application state
         println(UIApplication.sharedApplication().applicationState.rawValue )
+    }
+    
+    // user changed the location authorization
+    func locationManager(manager: CLLocationManager!,
+        didChangeAuthorizationStatus status: CLAuthorizationStatus)
+    {
+        if status == CLAuthorizationStatus.AuthorizedAlways {
+            println("always authorized")
+            // ...
+        }
     }
 
 }
