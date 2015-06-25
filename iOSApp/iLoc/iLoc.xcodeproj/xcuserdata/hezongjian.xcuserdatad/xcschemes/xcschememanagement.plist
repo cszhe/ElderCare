@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>iLoc WatchKit App.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>iLoc.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>9B11F4251B3BCB17008C34B0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>9BF4A0FE1B396ACB00C88AE1</key>
 		<dict>
 			<key>primary</key>
