@@ -80,16 +80,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // write file
         if self.cachedLocation.count >= 16 {
             FileUtil.appendLocation(self.cachedLocation)
-            self.cachedLocation.removeAll(keepCapacity: true)
+            self.cachedLocation = []    // remove all
         }
         
-        println("size = \(locations.count)")
-        println(locationObj.description)
+        //println("size = \(locations.count)")
+        //println(locationObj.description)
 
         
 //        labelGPS.text = locations.last?.description
 //        println(locations.last?.description)
-        
+        println(self.cachedLocation.count)
         // current application state
         println("AppState = \(UIApplication.sharedApplication().applicationState.rawValue)")
     }
@@ -113,7 +113,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             if (shouldIAllow == true) {
                 NSLog("Location to Allowed")
                 // Start location services
-                locationManager.startUpdatingLocation()
+                //locationManager.startUpdatingLocation()
             } else {
                 NSLog("Denied access: \(locationStatus)")
             }

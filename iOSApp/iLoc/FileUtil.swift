@@ -24,14 +24,16 @@ struct FileUtil {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let fname = "\(dateFormatter.stringFromDate(NSDate())).txt"
         let fileurl =  dir.URLByAppendingPathComponent(fname)
-        
-        println(fileurl)
+
         
         // put content to a string named data
-        var data = NSString()
+        var strdata = ""
         for loc in locations {
-            var str = loc.timestamp
+            var tmpstr = "\(loc.timestamp), \(loc.coordinate.latitude), \(loc.coordinate.longitude)\r\n"
+            strdata += tmpstr
         }
+        println(strdata)
+        var data = strdata.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
         
         if filemgr.fileExistsAtPath(fileurl.path!) {
             var err:NSError?
