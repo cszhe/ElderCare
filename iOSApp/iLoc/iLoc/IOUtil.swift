@@ -7,16 +7,16 @@
 //
 
 import Foundation
+import UIKit
 import CoreLocation
 
 
-struct FileUtil {
+struct IOUtil {
     
+    // File Operations
     static var filemgr = NSFileManager.defaultManager()
     
-    
     static func appendLocation(locations : [CLLocation]) {
-        println("Writing file")
         
         let dir : NSURL = filemgr.URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask).last as! NSURL
         
@@ -52,6 +52,37 @@ struct FileUtil {
                 println("Can't write \(err)")
             }
         }
-        
     }
+    
+    // Network Operations
+    
+    static func appendLocationDB(curloc : CLLocation) {
+        
+        var locrecord : [String: String] = ["NAME": "Zongjian","CONNECTION":"1"]
+        locrecord["LOCATION_X"] = curloc.coordinate.latitude.description
+        locrecord["LOCATION_Y"] = curloc.coordinate.longitude.description
+        locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor.UUIDString
+        
+        let body = NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(0), error: nil)
+        
+        println(NSString(data: body!, encoding: NSUTF8StringEncoding))
+        
+        let urlPath = "http://180.168.144.190:35821/Ageing_service.asmx/insertCargoInfo"
+        let url: NSURL = NSURL(string: urlPath)!
+        
+        let request = NSMutableURLRequest(URL: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.HTTPBody = body!
+        request.HTTPMethod = "POST"
+        
+        let session = NSURLSession.sharedSession()
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            (data, response, error) in
+            println(NSString(data: data, encoding: NSUTF8StringEncoding))
+        }
+        task.resume()
+    }
+    
+    
 }

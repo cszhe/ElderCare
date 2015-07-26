@@ -60,6 +60,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    @IBAction func callWS(sender: UIButton) {
+        
+        
+    }
 
     @IBAction func isTrackingChanged(sender: UISwitch) {
         if sender.on {
@@ -79,19 +85,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         // write file
         if self.cachedLocation.count >= 16 {
-            FileUtil.appendLocation(self.cachedLocation)
+            IOUtil.appendLocation(self.cachedLocation)
             self.cachedLocation = []    // remove all
         }
         
-        //println("size = \(locations.count)")
-        //println(locationObj.description)
-
-        
-//        labelGPS.text = locations.last?.description
-//        println(locations.last?.description)
         println(self.cachedLocation.count)
         // current application state
-        println("AppState = \(UIApplication.sharedApplication().applicationState.rawValue)")
+        //println("AppState = \(UIApplication.sharedApplication().applicationState.rawValue)")
+        
+        
+        // Call web serivce
+        IOUtil.appendLocationDB(locationObj)
+        
     }
     
     func locationManager(manager: CLLocationManager!,
