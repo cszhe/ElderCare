@@ -95,7 +95,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         
         // Call web serivce
-        IOUtil.appendLocationDB(locationObj)
+        IOUtil.appendLocationDB2(locationObj)
+        //IOUtil.appendLocationDBTest(locationObj)
         
     }
     
