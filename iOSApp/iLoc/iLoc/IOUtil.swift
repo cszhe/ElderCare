@@ -102,11 +102,14 @@ struct IOUtil {
     static func appendLocationDB2(curloc : CLLocation) {
         
         var locrecord : [String: String] = ["NAME": "iPhone","CONNECTION":"1"]
-        locrecord["TIME"] = NSDate().description
+        //date
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:SS"
+        locrecord["TIME"] = dateFormatter.stringFromDate(NSDate())
         locrecord["LOCATION_X"] = curloc.coordinate.latitude.description
         locrecord["LOCATION_Y"] = curloc.coordinate.longitude.description
         locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor.UUIDString
-        locrecord["SCREEN_ON"] = "true"
+        locrecord["SCREEN_ON"] = "1"
         
         // battery
         UIDevice.currentDevice().batteryMonitoringEnabled = true
