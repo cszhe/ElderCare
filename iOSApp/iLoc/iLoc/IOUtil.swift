@@ -59,8 +59,8 @@ struct IOUtil {
     static func appendLocationDB(curloc : CLLocation) {
         
         var locrecord : [String: String] = ["NAME": "Zongjian","CONNECTION":"1"]
-        locrecord["LOCATION_X"] = curloc.coordinate.latitude.description
-        locrecord["LOCATION_Y"] = curloc.coordinate.longitude.description
+        locrecord["LOCATION_X"] = curloc.coordinate.longitude.description
+        locrecord["LOCATION_Y"] = curloc.coordinate.latitude.description
         locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor.UUIDString
         
         let body = NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(0), error: nil)
@@ -106,8 +106,8 @@ struct IOUtil {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:SS"
         locrecord["TIME"] = dateFormatter.stringFromDate(NSDate())
-        locrecord["LOCATION_X"] = curloc.coordinate.latitude.description
-        locrecord["LOCATION_Y"] = curloc.coordinate.longitude.description
+        locrecord["LOCATION_X"] = curloc.coordinate.longitude.description
+        locrecord["LOCATION_Y"] = curloc.coordinate.latitude.description
         locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor.UUIDString
         locrecord["SCREEN_ON"] = "1"
         
