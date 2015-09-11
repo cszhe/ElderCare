@@ -95,7 +95,6 @@ struct IOUtil {
     <LOCATION_Y>string</LOCATION_Y>
     <CONNECTION>string</CONNECTION>
     <SCREEN_ON>string</SCREEN_ON>
-    <SCREEN_OFF>string</SCREEN_OFF>
     <BATTERY>string</BATTERY>
     </insertCargoInfo>
     */
@@ -108,7 +107,6 @@ struct IOUtil {
         locrecord["LOCATION_Y"] = curloc.coordinate.longitude.description
         locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor.UUIDString
         locrecord["SCREEN_ON"] = "true"
-        locrecord["SCREEN_OFF"] = "true"
         
         // battery
         UIDevice.currentDevice().batteryMonitoringEnabled = true
@@ -145,7 +143,6 @@ struct IOUtil {
         locrecord["LOCATION_Y"] = "1"
         locrecord["EQID"] = "133"
         locrecord["SCREEN_ON"] = "true"
-        locrecord["SCREEN_OFF"] = "false"
         locrecord["BATTERY"] = "33"
         
         
