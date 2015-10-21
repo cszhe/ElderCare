@@ -29,27 +29,31 @@ struct IOUtil {
         // put content to a string named data
         var strdata = ""
         for loc in locations {
-            var tmpstr = "\(loc.timestamp), \(loc.coordinate.latitude), \(loc.coordinate.longitude)\r\n"
+            let tmpstr = "\(loc.timestamp), \(loc.coordinate.latitude), \(loc.coordinate.longitude)\r\n"
             strdata += tmpstr
         }
-        println(strdata)
-        var data = strdata.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        print(strdata)
+        let data = strdata.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
         
         if filemgr.fileExistsAtPath(fileurl.path!) {
             var err:NSError?
-            if let fileHandle = NSFileHandle(forWritingToURL: fileurl, error: &err) {
+            do {
+                let fileHandle = try NSFileHandle(forWritingToURL: fileurl)
                 fileHandle.seekToEndOfFile()
                 fileHandle.writeData(data)
                 fileHandle.closeFile()
-            }
-            else {
-                println("Can't open fileHandle \(err)")
+            } catch let error as NSError {
+                err = error
+                print("Can't open fileHandle \(err)")
             }
         }
         else {
             var err:NSError?
-            if !data.writeToURL(fileurl, options: .DataWritingAtomic, error: &err) {
-                println("Can't write \(err)")
+            do {
+                try data.writeToURL(fileurl, options: .DataWritingAtomic)
+            } catch let error as NSError {
+                err = error
+                print("Can't write \(err)")
             }
         }
     }
@@ -63,9 +67,9 @@ struct IOUtil {
         locrecord["LOCATION_Y"] = curloc.coordinate.latitude.description
         locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor.UUIDString
         
-        let body = NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(0), error: nil)
+        let body = try? NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(rawValue: 0))
         
-        println(NSString(data: body!, encoding: NSUTF8StringEncoding))
+        print(NSString(data: body!, encoding: NSUTF8StringEncoding))
         
         let urlPath = "http://180.168.144.190:35821/Ageing_service.asmx/insertCargoInfo"
         let url: NSURL = NSURL(string: urlPath)!
@@ -79,7 +83,7 @@ struct IOUtil {
         let session = NSURLSession.sharedSession()
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             (data, response, error) in
-            println(NSString(data: data, encoding: NSUTF8StringEncoding))
+            print(NSString(data: data, encoding: NSUTF8StringEncoding))
         }
         task.resume()
     }
@@ -116,9 +120,9 @@ struct IOUtil {
         locrecord["BATTERY"] = "\(UIDevice.currentDevice().batteryLevel * 100)"
 
         
-        let body = NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(0), error: nil)!
+        let body = try! NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(rawValue: 0))
         
-        println(NSString(data: body, encoding: NSUTF8StringEncoding)!)
+        print(NSString(data: body, encoding: NSUTF8StringEncoding)!)
         
         let urlPath = "http://180.168.144.190:35821/Ageing_service.asmx/insertCargoInfo"
         let url: NSURL = NSURL(string: urlPath)!
@@ -132,7 +136,7 @@ struct IOUtil {
         let session = NSURLSession.sharedSession()
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             (data, response, error) in
-            println(NSString(data: data, encoding: NSUTF8StringEncoding)!)
+            print(NSString(data: data, encoding: NSUTF8StringEncoding)!)
         }
         task.resume()
     }
@@ -149,9 +153,9 @@ struct IOUtil {
         locrecord["BATTERY"] = "33"
         
         
-        let body = NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(0), error: nil)!
+        let body = try! NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(rawValue: 0))
         
-        println(NSString(data: body, encoding: NSUTF8StringEncoding)!)
+        print(NSString(data: body, encoding: NSUTF8StringEncoding)!)
         
         let urlPath = "http://180.168.144.190:35821/Ageing_service.asmx/insertCargoInfo"
         let url: NSURL = NSURL(string: urlPath)!
@@ -165,7 +169,7 @@ struct IOUtil {
         let session = NSURLSession.sharedSession()
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             (data, response, error) in
-            println(NSString(data: data, encoding: NSUTF8StringEncoding)!)
+            print(NSString(data: data, encoding: NSUTF8StringEncoding)!)
         }
         task.resume()
     }

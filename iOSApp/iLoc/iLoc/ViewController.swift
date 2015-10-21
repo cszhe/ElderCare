@@ -34,7 +34,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
         
         // Ask User to start GPS.
-        println(CLLocationManager.locationServicesEnabled())
+        print(CLLocationManager.locationServicesEnabled())
 //        if CLLocationManager.locationServicesEnabled() == false {
 //            let alertController = UIAlertController(
 //                title: "位置服务被关闭",
@@ -76,7 +76,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     // major location update
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
 
         var locationObj = locations.last as! CLLocation
@@ -89,7 +89,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             self.cachedLocation = []    // remove all
         }
         
-        println(self.cachedLocation.count)
+        print(self.cachedLocation.count)
         // current application state
         //println("AppState = \(UIApplication.sharedApplication().applicationState.rawValue)")
         
@@ -100,7 +100,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
     }
     
-    func locationManager(manager: CLLocationManager!,
+    func locationManager(manager: CLLocationManager,
         didChangeAuthorizationStatus status: CLAuthorizationStatus) {
             var shouldIAllow = false
             
