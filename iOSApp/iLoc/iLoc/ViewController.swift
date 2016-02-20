@@ -79,7 +79,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
 
-        var locationObj = locations.last as! CLLocation
+        let locationObj = locations.last as CLLocation!
         
         self.cachedLocation.append(locationObj)
         
@@ -95,7 +95,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         
         // Call web serivce
-        IOUtil.appendLocationDB2(locationObj)
+        //IOUtil.appendLocationDB2(locationObj)
         //IOUtil.appendLocationDBTest(locationObj)
         
     }

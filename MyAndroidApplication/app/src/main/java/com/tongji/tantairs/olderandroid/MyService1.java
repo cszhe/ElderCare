@@ -110,7 +110,8 @@ public class MyService1 extends Service {
         locationProvider = locationManager.getBestProvider(criteria, true);
         locationListener = new MyLocationListener();
         locationManager.addGpsStatusListener(listener);
-        locationManager.requestLocationUpdates(locationProvider, 3000, 0, locationListener);
+        // update every 20s.
+        locationManager.requestLocationUpdates(locationProvider, 20000, 0, locationListener);
     }
 
     private class MyLocationListener implements LocationListener {

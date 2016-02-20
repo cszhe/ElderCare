@@ -18,7 +18,7 @@ struct IOUtil {
     
     static func appendLocation(locations : [CLLocation]) {
         
-        let dir : NSURL = filemgr.URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask).last as! NSURL
+        let dir : NSURL = filemgr.URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask).last as NSURL!
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -65,7 +65,7 @@ struct IOUtil {
         var locrecord : [String: String] = ["NAME": "Zongjian","CONNECTION":"1"]
         locrecord["LOCATION_X"] = curloc.coordinate.longitude.description
         locrecord["LOCATION_Y"] = curloc.coordinate.latitude.description
-        locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor.UUIDString
+        locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor!.UUIDString
         
         let body = try? NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(rawValue: 0))
         
@@ -81,9 +81,9 @@ struct IOUtil {
         request.HTTPMethod = "POST"
         
         let session = NSURLSession.sharedSession()
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+        let task = session.dataTaskWithRequest(request) {
             (data, response, error) in
-            print(NSString(data: data, encoding: NSUTF8StringEncoding))
+            print(NSString(data: data!, encoding: NSUTF8StringEncoding))
         }
         task.resume()
     }
@@ -112,7 +112,7 @@ struct IOUtil {
         locrecord["TIME"] = dateFormatter.stringFromDate(NSDate())
         locrecord["LOCATION_X"] = curloc.coordinate.longitude.description
         locrecord["LOCATION_Y"] = curloc.coordinate.latitude.description
-        locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor.UUIDString
+        locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor!.UUIDString
         locrecord["SCREEN_ON"] = "1"
         
         // battery
@@ -134,9 +134,9 @@ struct IOUtil {
         request.HTTPMethod = "POST"
         
         let session = NSURLSession.sharedSession()
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+        let task = session.dataTaskWithRequest(request) {
             (data, response, error) in
-            print(NSString(data: data, encoding: NSUTF8StringEncoding)!)
+            print(NSString(data: data!, encoding: NSUTF8StringEncoding)!)
         }
         task.resume()
     }
@@ -167,9 +167,9 @@ struct IOUtil {
         request.HTTPMethod = "POST"
         
         let session = NSURLSession.sharedSession()
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+        let task = session.dataTaskWithRequest(request) {
             (data, response, error) in
-            print(NSString(data: data, encoding: NSUTF8StringEncoding)!)
+            print(NSString(data: data!, encoding: NSUTF8StringEncoding)!)
         }
         task.resume()
     }

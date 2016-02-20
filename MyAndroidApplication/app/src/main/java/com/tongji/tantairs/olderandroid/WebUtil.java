@@ -19,6 +19,7 @@ public class WebUtil {
 
     public void postToDataSource(String name, String eqid, String time, double longitude, double latitude, String connection, boolean screen_on, String battery) {
 
+        System.out.println("post to server");
         try {
             HttpPost requst = new HttpPost(url);
             requst.addHeader("Accept", "application/json");
