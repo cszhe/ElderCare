@@ -29,7 +29,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // Init location manager
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.delegate = self
-        if CLLocationManager.authorizationStatus() == .NotDetermined {
+        if CLLocationManager.authorizationStatus() == .notDetermined {
             locationManager.requestAlwaysAuthorization()
         }
         
@@ -62,13 +62,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
-    @IBAction func callWS(sender: UIButton) {
+    @IBAction func callWS(_ sender: UIButton) {
         
         
     }
 
-    @IBAction func isTrackingChanged(sender: UISwitch) {
-        if sender.on {
+    @IBAction func isTrackingChanged(_ sender: UISwitch) {
+        if sender.isOn {
             locationManager.startUpdatingLocation()
         } else {
             locationManager.stopUpdatingLocation()
@@ -76,12 +76,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     // major location update
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
 
         let locationObj = locations.last as CLLocation!
         
-        self.cachedLocation.append(locationObj)
+        self.cachedLocation.append(locationObj!)
         
         // write file
         if self.cachedLocation.count >= 16 {
@@ -100,22 +100,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
     }
     
-    func locationManager(manager: CLLocationManager,
-        didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(_ manager: CLLocationManager,
+        didChangeAuthorization status: CLAuthorizationStatus) {
             var shouldIAllow = false
             
             switch status {
-            case CLAuthorizationStatus.Restricted:
+            case CLAuthorizationStatus.restricted:
                 locationStatus = "Restricted Access to location"
-            case CLAuthorizationStatus.Denied:
+            case CLAuthorizationStatus.denied:
                 locationStatus = "User denied access to location"
-            case CLAuthorizationStatus.NotDetermined:
+            case CLAuthorizationStatus.notDetermined:
                 locationStatus = "Status not determined"
             default:
                 locationStatus = "Allowed to location Access"
                 shouldIAllow = true
             }
-            NSNotificationCenter.defaultCenter().postNotificationName("LabelHasbeenUpdated", object: nil)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "LabelHasbeenUpdated"), object: nil)
             if (shouldIAllow == true) {
                 NSLog("Location to Allowed")
                 // Start location services

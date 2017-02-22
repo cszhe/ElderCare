@@ -14,16 +14,16 @@ import CoreLocation
 struct IOUtil {
     
     // File Operations
-    static var filemgr = NSFileManager.defaultManager()
+    static var filemgr = FileManager.default
     
-    static func appendLocation(locations : [CLLocation]) {
+    static func appendLocation(_ locations : [CLLocation]) {
         
-        let dir : NSURL = filemgr.URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask).last as NSURL!
+        let dir : URL = filemgr.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).last as URL!
         
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        let fname = "\(dateFormatter.stringFromDate(NSDate())).txt"
-        let fileurl =  dir.URLByAppendingPathComponent(fname)
+        let fname = "\(dateFormatter.string(from: Date())).txt"
+        let fileurl =  dir.appendingPathComponent(fname)
 
         
         // put content to a string named data
@@ -33,14 +33,14 @@ struct IOUtil {
             strdata += tmpstr
         }
         print(strdata)
-        let data = strdata.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        let data = strdata.data(using: String.Encoding.utf8, allowLossyConversion: false)!
         
-        if filemgr.fileExistsAtPath(fileurl.path!) {
+        if filemgr.fileExists(atPath: fileurl.path) {
             var err:NSError?
             do {
-                let fileHandle = try NSFileHandle(forWritingToURL: fileurl)
+                let fileHandle = try FileHandle(forWritingTo: fileurl)
                 fileHandle.seekToEndOfFile()
-                fileHandle.writeData(data)
+                fileHandle.write(data)
                 fileHandle.closeFile()
             } catch let error as NSError {
                 err = error
@@ -50,7 +50,7 @@ struct IOUtil {
         else {
             var err:NSError?
             do {
-                try data.writeToURL(fileurl, options: .DataWritingAtomic)
+                try data.write(to: fileurl, options: .atomic)
             } catch let error as NSError {
                 err = error
                 print("Can't write \(err)")
@@ -60,31 +60,30 @@ struct IOUtil {
     
     // Network Operations
     
-    static func appendLocationDB(curloc : CLLocation) {
+    static func appendLocationDB(_ curloc : CLLocation) {
         
         var locrecord : [String: String] = ["NAME": "Zongjian","CONNECTION":"1"]
         locrecord["LOCATION_X"] = curloc.coordinate.longitude.description
         locrecord["LOCATION_Y"] = curloc.coordinate.latitude.description
-        locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor!.UUIDString
+        locrecord["EQID"] = UIDevice.current.identifierForVendor!.uuidString
         
-        let body = try? NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(rawValue: 0))
+        let body = try? JSONSerialization.data(withJSONObject: locrecord, options: JSONSerialization.WritingOptions(rawValue: 0))
         
-        print(NSString(data: body!, encoding: NSUTF8StringEncoding))
+        // print(NSString(data: body!, encoding: String.Encoding.utf8.rawValue))
         
         let urlPath = "http://180.168.144.190:35821/Ageing_service.asmx/insertCargoInfo"
-        let url: NSURL = NSURL(string: urlPath)!
+        let url: URL = URL(string: urlPath)!
         
-        let request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.HTTPBody = body!
-        request.HTTPMethod = "POST"
+        request.httpBody = body!
+        request.httpMethod = "POST"
         
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(request) {
+        let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: {
             (data, response, error) in
-            print(NSString(data: data!, encoding: NSUTF8StringEncoding))
-        }
+            print(String(data: data!, encoding: String.Encoding.utf8)!)
+        }) 
         task.resume()
     }
     
@@ -103,46 +102,45 @@ struct IOUtil {
     </insertCargoInfo>
     */
     
-    static func appendLocationDB2(curloc : CLLocation) {
+    static func appendLocationDB2(_ curloc : CLLocation) {
         
         var locrecord : [String: String] = ["NAME": "iPhone","CONNECTION":"1"]
         //date
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:SS"
-        locrecord["TIME"] = dateFormatter.stringFromDate(NSDate())
+        locrecord["TIME"] = dateFormatter.string(from: Date())
         locrecord["LOCATION_X"] = curloc.coordinate.longitude.description
         locrecord["LOCATION_Y"] = curloc.coordinate.latitude.description
-        locrecord["EQID"] = UIDevice.currentDevice().identifierForVendor!.UUIDString
+        locrecord["EQID"] = UIDevice.current.identifierForVendor!.uuidString
         locrecord["SCREEN_ON"] = "1"
         
         // battery
-        UIDevice.currentDevice().batteryMonitoringEnabled = true
-        locrecord["BATTERY"] = "\(UIDevice.currentDevice().batteryLevel * 100)"
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        locrecord["BATTERY"] = "\(UIDevice.current.batteryLevel * 100)"
 
         
-        let body = try! NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(rawValue: 0))
+        let body = try! JSONSerialization.data(withJSONObject: locrecord, options: JSONSerialization.WritingOptions(rawValue: 0))
         
-        print(NSString(data: body, encoding: NSUTF8StringEncoding)!)
+        print(NSString(data: body, encoding: String.Encoding.utf8.rawValue)!)
         
         let urlPath = "http://180.168.144.190:35821/Ageing_service.asmx/insertCargoInfo"
-        let url: NSURL = NSURL(string: urlPath)!
+        let url: URL = URL(string: urlPath)!
         
-        let request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.HTTPBody = body
-        request.HTTPMethod = "POST"
+        request.httpBody = body
+        request.httpMethod = "POST"
         
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(request) {
+        let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: {
             (data, response, error) in
-            print(NSString(data: data!, encoding: NSUTF8StringEncoding)!)
-        }
+            print(String(data: data!, encoding: String.Encoding.utf8)!)
+        })
         task.resume()
     }
     
     
-    static func appendLocationDBTest(curloc : CLLocation) {
+    static func appendLocationDBTest(_ curloc : CLLocation) {
         
         var locrecord : [String: String] = ["NAME": "iPhone","CONNECTION":"1"]
         locrecord["TIME"] = "2005"
@@ -153,24 +151,24 @@ struct IOUtil {
         locrecord["BATTERY"] = "33"
         
         
-        let body = try! NSJSONSerialization.dataWithJSONObject(locrecord, options: NSJSONWritingOptions(rawValue: 0))
+        let body = try! JSONSerialization.data(withJSONObject: locrecord, options: JSONSerialization.WritingOptions(rawValue: 0))
         
-        print(NSString(data: body, encoding: NSUTF8StringEncoding)!)
+        print(NSString(data: body, encoding: String.Encoding.utf8.rawValue)!)
         
         let urlPath = "http://180.168.144.190:35821/Ageing_service.asmx/insertCargoInfo"
-        let url: NSURL = NSURL(string: urlPath)!
+        let url: URL = URL(string: urlPath)!
         
-        let request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.HTTPBody = body
-        request.HTTPMethod = "POST"
+        request.httpBody = body
+        request.httpMethod = "POST"
         
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(request) {
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest, completionHandler: {
             (data, response, error) in
-            print(NSString(data: data!, encoding: NSUTF8StringEncoding)!)
-        }
+            print(String(data: data!, encoding: String.Encoding.utf8)!)
+        }) 
         task.resume()
     }
     
