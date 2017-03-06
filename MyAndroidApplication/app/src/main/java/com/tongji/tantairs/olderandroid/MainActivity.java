@@ -18,13 +18,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
     private Button button1;
     private Button button2;
-//    private EditText editText;
-//    private String inputName;
+    private TextView tvInfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,8 @@ public class MainActivity extends Activity {
 
         button1 = (Button) findViewById(R.id.startService);
         button2 = (Button) findViewById(R.id.stopService);
-//        editText = (EditText)findViewById(R.id.inputName);
+        tvInfo = (TextView) findViewById(R.id.showContent);
+
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +46,9 @@ public class MainActivity extends Activity {
 //                intent.putExtra("name",inputName);
                 startService(intent);
 //                startService(new Intent(MainActivity.this, MyService2.class));
+
+                tvInfo.setText("Service started. Use your phone freely.");
+
             }
         });
 
